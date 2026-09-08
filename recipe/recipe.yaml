@@ -1,0 +1,46 @@
+schema_version: 1
+
+context:
+  name: aioopenssl
+  version: "0.6.0"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/aioopenssl-${{ version }}.tar.gz
+  sha256: eae2fb193ec0d2a3f752f72d8f672191cc836b1039de5e334cc9cb835b800831
+
+build:
+  number: 1
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - python ${{ python_min }}.*
+    - pip
+    - setuptools
+  run:
+    - python >=${{ python_min }}
+    - pyopenssl
+
+tests:
+  - python:
+      imports:
+        - aioopenssl
+      pip_check: true
+      python_version:
+        - ${{ python_min }}
+        - "*"
+
+about:
+  summary: TLS-capable transport using OpenSSL for asyncio
+  license: Apache-2.0
+  license_file: COPYING
+  homepage: https://github.com/horazont/aioopenssl
+
+extra:
+  recipe-maintainers:
+    - akrherz
